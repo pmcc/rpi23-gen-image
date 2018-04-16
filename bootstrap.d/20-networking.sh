@@ -94,14 +94,17 @@ if [ "$ENABLE_WIRELESS" = true ] ; then
   # Fetch firmware binary blob
   as_nobody wget -q -O "${temp_dir}/brcmfmac43430-sdio.bin" "${WLAN_FIRMWARE_URL}/brcmfmac43430-sdio.bin"
   as_nobody wget -q -O "${temp_dir}/brcmfmac43430-sdio.txt" "${WLAN_FIRMWARE_URL}/brcmfmac43430-sdio.txt"
+  as_nobody wget -q -O "${temp_dir}/brcmfmac43455-sdio.bin" "${WLAN_FIRMWARE_URL}/brcmfmac43455-sdio.bin"
+  as_nobody wget -q -O "${temp_dir}/brcmfmac43455-sdio.txt" "${WLAN_FIRMWARE_URL}/brcmfmac43455-sdio.txt"
+  as_nobody wget -q -O "${temp_dir}/brcmfmac43455-sdio.clm_blob" "${WLAN_FIRMWARE_URL}/brcmfmac43455-sdio.clm_blob"
 
   # Move downloaded firmware binary blob
-  mv "${temp_dir}/brcmfmac43430-sdio."* "${WLAN_FIRMWARE_DIR}/"
+  mv "${temp_dir}/brcmfmac43"* "${WLAN_FIRMWARE_DIR}/"
 
   # Remove temporary directory for firmware binary blob
   rm -fr "${temp_dir}"
 
   # Set permissions of the firmware binary blob
-  chown root:root "${WLAN_FIRMWARE_DIR}/brcmfmac43430-sdio."*
-  chmod 600 "${WLAN_FIRMWARE_DIR}/brcmfmac43430-sdio."*
+  chown root:root "${WLAN_FIRMWARE_DIR}/brcmfmac43"*
+  chmod 600 "${WLAN_FIRMWARE_DIR}/brcmfmac43"*
 fi
