@@ -19,6 +19,11 @@ if [ "$BUILD_KERNEL" = true ] ; then
     if [ "$KERNELSRC_CLEAN" = true ] && [ "$KERNELSRC_PREBUILT" = false ] ; then
       make -C "${KERNEL_DIR}" ARCH="${KERNEL_ARCH}" CROSS_COMPILE="${CROSS_COMPILE}" mrproper
     fi
+
+    # Get kernel branch
+    if [ -z "${KERNEL_BRANCH}" ] ; then
+      KERNEL_BRANCH="$(make kernelversion | tail -1)";
+    fi
   else # KERNELSRC_DIR=""
     # Create temporary directory for kernel sources
     temp_dir=$(as_nobody mktemp -d)
@@ -26,6 +31,7 @@ if [ "$BUILD_KERNEL" = true ] ; then
     # Fetch current RPi2/3 kernel sources
     if [ -z "${KERNEL_BRANCH}" ] ; then
       as_nobody git -C "${temp_dir}" clone --depth=1 "${KERNEL_URL}" linux
+      KERNEL_BRANCH="git -C "${temp_dir}" branch | sed -n '/\* /s///p'"
     else
       as_nobody git -C "${temp_dir}" clone --depth=1 --branch "${KERNEL_BRANCH}" "${KERNEL_URL}" linux
    fi
@@ -38,6 +44,16 @@ if [ "$BUILD_KERNEL" = true ] ; then
 
     # Set permissions of the kernel sources
     chown -R root:root "${R}/usr/src"
+  fi
+
+  # Kernel branches >= 4.14 don't have firmware_install
+  KERNEL_FIRMWARE_INSTALL=false
+  KERNEL_BRANCH_X="$(echo ${KERNEL_BRANCH} | cut -d '.' -f 1 | cut -d '-' -f 2)"
+  KERNEL_BRANCH_Y="$(echo ${KERNEL_BRANCH} | cut -d '.' -f 2)"
+  KERNEL_VERSION="$(expr $KERNEL_BRANCH_X \* 100 + $KERNEL_BRANCH_Y)"
+  # Install if version < 4.14
+  if [ "$KERNEL_VERSION" -lt 414 ] ; then
+    KERNEL_FIRMWARE_INSTALL=true
   fi
 
   # Calculate optimal number of kernel building threads

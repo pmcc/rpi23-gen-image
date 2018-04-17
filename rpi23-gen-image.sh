@@ -67,18 +67,6 @@ else
 fi
 KERNEL_BRANCH=${KERNEL_BRANCH:=""}
 
-# Default kernel branch doesn't have firmware_install (4.14+)
-KERNEL_FIRMWARE_INSTALL=false
-if [ ! -z "$KERNEL_BRANCH" ] ; then
-  KERNEL_BRANCH_X="$(echo $KERNEL_BRANCH | cut -d '.' -f 1 | cut -d '-' -f 2)"
-  KERNEL_BRANCH_Y="$(echo $KERNEL_BRANCH | cut -d '.' -f 2)"
-  KERNEL_VERSION="$(expr $KERNEL_BRANCH_X \* 100 + $KERNEL_BRANCH_Y)"
-  # Install if version < 4.14
-  if [ "$KERNEL_VERSION" -lt 414 ] ; then
-    KERNEL_FIRMWARE_INSTALL=true
-  fi
-fi
-
 # URLs
 KERNEL_URL=${KERNEL_URL:=https://github.com/raspberrypi/linux}
 FIRMWARE_URL=${FIRMWARE_URL:=https://github.com/raspberrypi/firmware/raw/master/boot}
