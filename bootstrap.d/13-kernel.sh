@@ -117,6 +117,8 @@ if [ "$BUILD_KERNEL" = true ] ; then
     # Install kernel firmware
     if [ "$KERNEL_FIRMWARE_INSTALL" = true ] ; then
       make -C "${KERNEL_DIR}" ARCH="${KERNEL_ARCH}" CROSS_COMPILE="${CROSS_COMPILE}" INSTALL_FW_PATH=../../../lib firmware_install
+    else
+      make -C "${KERNEL_DIR}" ARCH="${KERNEL_ARCH}" CROSS_COMPILE="${CROSS_COMPILE}" INSTALL_FW_PATH=../../../lib
     fi
   fi
 

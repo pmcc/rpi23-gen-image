@@ -72,7 +72,9 @@ KERNEL_FIRMWARE_INSTALL=false
 if [ ! -z "$KERNEL_BRANCH" ] ; then
   KERNEL_BRANCH_X="$(echo $KERNEL_BRANCH | cut -d '.' -f 1 | cut -d '-' -f 2)"
   KERNEL_BRANCH_Y="$(echo $KERNEL_BRANCH | cut -d '.' -f 2)"
-  if [ "$KERNEL_BRANCH_X" -le 4 ] && [ "$KERNEL_BRANCH_Y" -lt 14 ] ; then
+  KERNEL_VERSION="$(expr $KERNEL_BRANCH_X \* 100 + $KERNEL_BRANCH_Y)"
+  # Install if version < 4.14
+  if [ "$KERNEL_VERSION" -lt 414 ] ; then
     KERNEL_FIRMWARE_INSTALL=true
   fi
 fi
@@ -271,6 +273,11 @@ if [ "$BUILD_KERNEL" = true ] ; then
     REQUIRED_PACKAGES="${REQUIRED_PACKAGES} crossbuild-essential-armhf"
   else
     REQUIRED_PACKAGES="${REQUIRED_PACKAGES} crossbuild-essential-arm64"
+  fi
+
+  # > 4.14 requires additional packages
+  if [ "$KERNEL_VERSION" -gt 414 ] ; then
+    REQUIRED_PACKAGES="${REQUIRED_PACKAGES} bison flex libssl-dev"
   fi
 fi
 
