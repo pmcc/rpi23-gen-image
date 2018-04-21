@@ -263,10 +263,7 @@ if [ "$BUILD_KERNEL" = true ] ; then
     REQUIRED_PACKAGES="${REQUIRED_PACKAGES} crossbuild-essential-arm64"
   fi
 
-  # > 4.14 requires additional packages
-  if [ "$KERNEL_VERSION" -gt 414 ] ; then
-    REQUIRED_PACKAGES="${REQUIRED_PACKAGES} bison flex libssl-dev"
-  fi
+  REQUIRED_PACKAGES="${REQUIRED_PACKAGES} bison flex libssl-dev"
 fi
 
 # Add libncurses5 to enable kernel menuconfig

@@ -22,7 +22,7 @@ if [ "$BUILD_KERNEL" = true ] ; then
 
     # Get kernel branch
     if [ -z "${KERNEL_BRANCH}" ] ; then
-      KERNEL_BRANCH="$(make kernelversion | tail -1)";
+      KERNEL_BRANCH=`make -C "${KERNEL_DIR}" kernelversion | tail -1`;
     fi
   else # KERNELSRC_DIR=""
     # Create temporary directory for kernel sources
